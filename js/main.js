@@ -1,5 +1,7 @@
 const categories = ["Harry Potter", "Hermione Granger", "Ron Weasley"];
-const startBtn = document.querySelector(".start-btn");
+const popCultureBtn = document.getElementById("popCulture");
+const moviesBtn = document.getElementById("movies");
+const harryPotterBtn = document.getElementById("harryPotter");
 const isIOS = !(
     navigator.userAgent.match(/(iPod|iPhone|iPad)/) &&
     navigator.userAgent.match(/AppleWebKit/)
@@ -8,7 +10,9 @@ const isIOS = !(
 
 
 function init() {
-    startBtn.addEventListener("click", startOrientation);    
+    popCultureBtn.addEventListener("click", startOrientation);    
+    moviesBtn.addEventListener("click", startOrientation);
+    harryPotterBtn.addEventListener("click", startOrientation);
 }
 
 function startOrientation() {
@@ -17,6 +21,7 @@ function startOrientation() {
         .then((response) => {
           if (response === "granted") {
             window.addEventListener("deviceorientation", handleOrientation, true);
+            alert("allowed!");
           } else {
             alert("has to be allowed!");
           }
@@ -35,7 +40,7 @@ function handleOrientation(event)
     var beta = event.beta;
     var gamma = event.gamma;
 
-    if (true) {
+    if (beta >= 100) {
         nextCategory();
     }
 
