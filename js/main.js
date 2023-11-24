@@ -1,3 +1,4 @@
+const categories = ["Harry Potter", "Hermione Granger", "Ron Weasley"];
 const startBtn = document.querySelector(".start-btn");
 const isIOS = !(
     navigator.userAgent.match(/(iPod|iPhone|iPad)/) &&
@@ -7,7 +8,7 @@ const isIOS = !(
 
 
 function init() {
-    startBtn.addEventListener("click", startOrientation);
+    startBtn.addEventListener("click", startOrientation);    
 }
 
 function startOrientation() {
@@ -28,27 +29,49 @@ function startOrientation() {
 
 
 function handleOrientation(event)
-{
-    // event.absolute = true;
-    
+{   
     var absolute = event.absolute;
     var alpha = event.alpha;
     var beta = event.beta;
     var gamma = event.gamma;
-    
-    document.getElementById("alpha").value = alpha;
-    document.getElementById("beta").value = beta;
-    document.getElementById("gamma").value = gamma;
 
-    //device face down is -180 on y axis (beta)
-    //device face up is 0 on all axis
+    if (true) {
+        nextCategory();
+    }
+
+    //device face down rotated on the x axis by beta degrees - towards 180
+    //deivce face up rotated on x axis by beta degrees - towards 0
+    
 }
 
-// window.addEventListener(
-//     "deviceorientation",
-//     handleOrientation,
-//     true
-// );
+function newGame(category) {
+
+    if (category == "harryPotter") {       
+
+        document.getElementById('currentWord').textContent = categories[0];
+    }
+}
+
+function nextCategory() {
+    document.getElementById('currentWord').textContent = categories[1];
+}
 
 
 init();
+
+document.getElementById("popCulture").onclick = function () {
+    document.querySelector('.categories').classList.toggle('active');
+    document.querySelector('.game').classList.toggle('active');
+}
+
+document.getElementById("movies").onclick = function () {  
+    document.querySelector('.categories').classList.toggle('active');
+    document.querySelector('.game').classList.toggle('active');
+}
+
+document.getElementById("harryPotter").onclick = function () {
+    document.querySelector('.categories').classList.toggle('active');    
+    document.querySelector('.game').classList.toggle('active');
+
+    newGame('harryPotter')
+}
