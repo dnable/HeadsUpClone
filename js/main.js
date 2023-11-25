@@ -1,5 +1,11 @@
 let categoryArray = [];
 let currentWordIndex = 0;
+var lastNext = 0;
+var pointsCorrect = 0;
+var targetMinutes = 0;
+var targetTime = 0;
+var now = 0;    
+var timerInterval;
 const popCultureBtn = document.getElementById("popCulture");
 const moviesBtn = document.getElementById("movies");
 const harryPotterBtn = document.getElementById("harryPotter");
@@ -41,8 +47,23 @@ function handleOrientation(event)
     var gamma = event.gamma;
 
     if (beta >= 100) {
-        nextCategory();
+        //only allow next word every 5 seconds
+        if (Date.now() - lastNext > 5000) {
+            nextWord();
+            lastNext = Date.now();
+            pointsCorrect += 1;
+            document.getElementById('scoreCount').textContent = pointsCorrect;
+        }
     }
+    //skip word
+    else if (beta <= 10) {
+        //only allow skips every 5 seconds
+        if (Date.now() - lastNext > 5000) {
+            nextWord();
+            lastNext = Date.now();
+        }
+    }
+
 
     //device face down rotated on the x axis by beta degrees - towards 180
     //deivce face up rotated on x axis by beta degrees - towards 0
@@ -50,9 +71,17 @@ function handleOrientation(event)
 }
 
 function newGame(category) {
+    //set targetTime and start timer
+    now = new Date().getTime();
+    targetMinutes = document.getElementById('timer-input').value;    
+    targetTime = new Date(now + (targetMinutes * 60 * 1000));        
+    timer();
+    timerInterval = setInterval(timer, 1000);
+
+    //set category
     setCategoryArray(category);
     shuffleArray(categoryArray);
-    document.getElementById('currentWord').textContent = harryPotterCategories[currentWordIndex];
+    document.getElementById('currentWord').textContent = categoryArray[currentWordIndex];    
 }
 
 function setCategoryArray(category) {
@@ -160,7 +189,7 @@ function setCategoryArray(category) {
     }
 }
 
-function nextCategory() {
+function nextWord() {
     currentWordIndex += 1;
     document.getElementById('currentWord').textContent = categoryArray[currentWordIndex];
 }
@@ -173,22 +202,46 @@ function shuffleArray(array) {
     }
   }
 
+
+// Timer
+function timer() {     
+    //find distance between target and now    
+    now = new Date().getTime();
+    var distance = targetTime - now;
+
+    //time calculations
+    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    
+    //output results
+    document.getElementById("timer").innerHTML = minutes + "m " + seconds + "s ";
+
+    //end timer
+    if (distance < 0) {        
+        document.getElementById('timer').innerHTML = "Time's up!";
+        document.querySelector('.categories').classList.toggle('active');
+        document.querySelector('.game').classList.toggle('active');
+        clearInterval(timerInterval);        
+    }
+}
+
 init();
+
 
 document.getElementById("popCulture").onclick = function () {
     document.querySelector('.categories').classList.toggle('active');
     document.querySelector('.game').classList.toggle('active');
-    newGame('popCulture')
+    newGame('popCulture');
 }
 
 document.getElementById("movies").onclick = function () {  
     document.querySelector('.categories').classList.toggle('active');
     document.querySelector('.game').classList.toggle('active');
-    newGame('movies')
+    newGame('movies');
 }
 
 document.getElementById("harryPotter").onclick = function () {
     document.querySelector('.categories').classList.toggle('active');    
     document.querySelector('.game').classList.toggle('active');
-    newGame('harryPotter')
+    newGame('harryPotter');
 }

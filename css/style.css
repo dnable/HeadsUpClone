@@ -1,3 +1,4 @@
+/* Categories */
 .categories .container {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -11,11 +12,35 @@
     padding: 100px;    
     display: grid;
     margin: auto;
+    -webkit-appearance: none;
+}
+
+
+/* Game */
+.game .container {
+    display: grid;
+    grid-template-rows: 1fr 4fr;
+}
+
+.game .container .header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.game .container .header .score {
+    text-align: right;
+    padding-right: 20px;
+}
+
+.game .container .header .timer {
+    text-align: left;
 }
 
 .game {
     display: none;
 }
+
+
 
 
 /* Display Logic */
@@ -26,6 +51,6 @@
 .game.active {
     display: grid;
     text-align: center;    
-    padding: 150px;
+    /* padding: 150px; */
     font-size: xx-large;
 }
