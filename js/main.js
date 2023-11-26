@@ -17,8 +17,6 @@ const isIOS = !(
 
 
 function init() {
-    popCultureBtn.addEventListener("click", startOrientation);    
-    moviesBtn.addEventListener("click", startOrientation);
     harryPotterBtn.addEventListener("click", startOrientation);
 }
 
@@ -46,28 +44,51 @@ function handleOrientation(event)
     var beta = event.beta;
     var gamma = event.gamma;
 
-    if (beta >= 100) {
-        //only allow next word every 5 seconds
-        if (Date.now() - lastNext > 5000) {
-            nextWord();
-            lastNext = Date.now();
-            pointsCorrect += 1;
-            document.getElementById('scoreCount').textContent = pointsCorrect;
+    //landscape left gamma is   <=40 >= 0; beta is <=20 >=-20 
+    if (beta <= 20 && beta >= -20) {
+        
+        //landscape left - point
+        if (gamma <= 40 && gamma >= 0) {
+            //only allow next word every 5 seconds
+            if (Date.now() - lastNext > 5000) {
+                nextWord();
+                lastNext = Date.now();
+                pointsCorrect += 1;
+                document.getElementById('scoreCount').textContent = pointsCorrect;
+            }
+        }
+
+        //landscape left - skip
+        else if (gamma >= -30 && gamma <= 0) {
+            //only allow skips every 5 seconds
+            if (Date.now() - lastNext > 5000) {
+                nextWord();
+                lastNext = Date.now();
+            }
         }
     }
-    //skip word
-    else if (beta <= 10) {
-        //only allow skips every 5 seconds
-        if (Date.now() - lastNext > 5000) {
-            nextWord();
-            lastNext = Date.now();
+    //landscape right gamma is  <=0  >=-30; beta is <=-160 >=-180 || <=179 >=160
+    else if ((beta <= -160 && beta >= -180) || (beta <= 179 && beta >= 160)) {
+
+        //landscape right - point
+        if (gamma >= -30 && gamma <= 0) {
+            //only allow next word every 5 seconds
+            if (Date.now() - lastNext > 5000) {
+                nextWord();
+                lastNext = Date.now();
+                pointsCorrect += 1;
+                document.getElementById('scoreCount').textContent = pointsCorrect;
+            }
+        }
+        //landscape right - skip
+        else if (gamma <= 20 && gamma >= 0) {
+            //only allow skips every 5 seconds
+            if (Date.now() - lastNext > 5000) {
+                nextWord();
+                lastNext = Date.now();
+            }
         }
     }
-
-
-    //device face down rotated on the x axis by beta degrees - towards 180
-    //deivce face up rotated on x axis by beta degrees - towards 0
-    
 }
 
 function newGame(category) {
@@ -226,19 +247,6 @@ function timer() {
 }
 
 init();
-
-
-document.getElementById("popCulture").onclick = function () {
-    document.querySelector('.categories').classList.toggle('active');
-    document.querySelector('.game').classList.toggle('active');
-    newGame('popCulture');
-}
-
-document.getElementById("movies").onclick = function () {  
-    document.querySelector('.categories').classList.toggle('active');
-    document.querySelector('.game').classList.toggle('active');
-    newGame('movies');
-}
 
 document.getElementById("harryPotter").onclick = function () {
     document.querySelector('.categories').classList.toggle('active');    
